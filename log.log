@@ -1,0 +1,21 @@
+02:52:49.583 [main] ERROR  - fail in CommandProvider
+java.lang.IllegalArgumentException: No enum constant by.htp.task01.controller.command.CommandName.REMOVE_BOOK
+	at java.lang.Enum.valueOf(Unknown Source) ~[?:1.8.0_131]
+	at by.htp.task01.controller.command.CommandName.valueOf(CommandName.java:1) ~[classes/:?]
+	at by.htp.task01.controller.command.CommandProvider.getCommand(CommandProvider.java:27) [classes/:?]
+	at by.htp.task01.controller.Controller.executeAction(Controller.java:26) [classes/:?]
+	at by.htp.task01.view.View.main(View.java:38) [classes/:?]
+02:55:14.801 [main] ERROR  - fail in CommandProvider
+java.lang.IllegalArgumentException: No enum constant by.htp.task01.controller.command.CommandName.REMOVE_BOOK
+	at java.lang.Enum.valueOf(Unknown Source) ~[?:1.8.0_131]
+	at by.htp.task01.controller.command.CommandName.valueOf(CommandName.java:1) ~[classes/:?]
+	at by.htp.task01.controller.command.CommandProvider.getCommand(CommandProvider.java:27) [classes/:?]
+	at by.htp.task01.controller.Controller.executeAction(Controller.java:26) [classes/:?]
+	at by.htp.task01.view.View.main(View.java:38) [classes/:?]
+13:56:49.163 [main] ERROR  - fail in CommandProvider
+java.lang.IllegalArgumentException: No enum constant by.htp.task01.controller.command.CommandName.REMOVE_BOOK
+	at java.lang.Enum.valueOf(Unknown Source) ~[?:1.8.0_131]
+	at by.htp.task01.controller.command.CommandName.valueOf(CommandName.java:1) ~[classes/:?]
+	at by.htp.task01.controller.command.CommandProvider.getCommand(CommandProvider.java:27) [classes/:?]
+	at by.htp.task01.controller.Controller.executeAction(Controller.java:26) [classes/:?]
+	at by.htp.task01.view.View.main(View.java:38) [classes/:?]

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/context 
+	   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+
+	<!-- properties -->
+	<context:property-placeholder location="classpath:database.properties" />
+
+	<!-- connection (через конструктор) -->
+	<bean id="connectionPool" class="by.htp.task01.dao.connection.ConnectionPool"
+		init-method="init" destroy-method="close">
+		<constructor-arg name="poolsize" value="${db.poolsize}"></constructor-arg>
+		<constructor-arg name="driver" value="${db.driver}"></constructor-arg>
+		<constructor-arg name="user" value="${db.user}"></constructor-arg>
+		<constructor-arg name="password" value="${db.password}"></constructor-arg>
+		<constructor-arg name="url" value="${db.url}"></constructor-arg>
+	</bean>
+
+
+	<!-- DAOFactory (через setters) -->
+	<bean id="instanceDAOFactory" class="by.htp.task01.dao.factory.DAOFactory">
+		<property name="userDAO" ref="userDAO" />
+		<property name="bookDAO" ref="bookDAO" />
+	</bean>
+
+	<bean id="userDAO" class="by.htp.task01.dao.impl.UserDAOImpl">
+		<property name="connectionPool" ref="connectionPool" />
+	</bean>
+
+	<bean id="bookDAO" class="by.htp.task01.dao.impl.BookDAOImpl">
+		<property name="connectionPool" ref="connectionPool" />
+	</bean>
+
+
+	<!-- Service Factory (через setters) -->
+	<bean id="instanceServiceFactory" class="by.htp.task01.service.factory.ServiceFactory">
+		<property name="userService" ref="userService" />
+		<property name="bookService" ref="bookService" />
+	</bean>
+
+	<bean id="userService" class="by.htp.task01.service.impl.UserServiceImpl">
+		<property name="factory" ref="instanceDAOFactory"></property>
+	</bean>
+
+	<bean id="bookService" class="by.htp.task01.service.impl.BookServiceImpl">
+		<property name="factory" ref="instanceDAOFactory"></property>
+	</bean>
+
+
+	<!-- Command -->
+
+	<bean id="addEditBookCommand" class="by.htp.task01.controller.command.impl.AddEditBook">
+		<property name="factory" ref="instanceServiceFactory" />
+	</bean>
+
+	<bean id="addNewBookCommand" class="by.htp.task01.controller.command.impl.AddNewBook">
+		<property name="factory" ref="instanceServiceFactory" />
+	</bean>
+	
+	<bean id="getBookListCommand" class="by.htp.task01.controller.command.impl.GetBookList">
+		<property name="factory" ref="instanceServiceFactory" />
+	</bean>
+
+	<bean id="signInCommand" class="by.htp.task01.controller.command.impl.SignIn">
+		<property name="factory" ref="instanceServiceFactory" />
+	</bean>
+
+	<bean id="signUnCommand" class="by.htp.task01.controller.command.impl.SignUp">
+		<property name="factory" ref="instanceServiceFactory" />
+	</bean>
+
+	<bean id="wrongRequestCommand" class="by.htp.task01.controller.command.impl.WrongRequest" />
+
+
+	<!-- CommandProvider -->
+	
+
+<bean id="map" class="java.util.HashMap">
+		<constructor-arg>
+			<map key-type="by.htp.task01.controller.command.CommandName"
+				value-type="by.htp.task01.controller.command.Command">
+				<entry key="ADD_NEW_BOOK" value-ref="addNewBookCommand" />
+				<entry key="SIGN_IN" value-ref="signInCommand" />
+				<entry key="SIGN_UP" value-ref="signUnCommand" />
+				<entry key="GET_BOOKLIST" value-ref="getBookListCommand" />
+				<entry key="ADD_EDIT_BOOK" value-ref="addEditBookCommand" />
+				<entry key="WRONG_REQUEST" value-ref="wrongRequestCommand" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="commandProvider"
+		class="by.htp.task01.controller.command.CommandProvider">
+		<constructor-arg ref="map"></constructor-arg>
+	</bean>
+
+
+
+
+
+	<!-- Controller (через конструктор) -->
+
+	<bean id="controller" class="by.htp.task01.controller.Controller">
+		<constructor-arg ref="commandProvider"></constructor-arg>
+	</bean>
+	
+</beans>
+             			   
